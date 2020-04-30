@@ -1,0 +1,33 @@
+---
+title: "Simulations"
+output: html_notebook
+---
+
+#Does IOS accounts for pleiotropic effect indeed?
+This simulation is designed to see whether decreased level of heterogeneity in MR analysis is because IOS score accounts for pleiotropic effect in MR model or just by chance.
+
+
+
+library(mr.ios)
+library(parallel)
+library(tidyverse)
+
+out <- list()
+invisible(capture.output(out <- lapply(1:2, function(x) {
+      ios_dat$SNP <- sample(ios_dat$SNP)
+      out$ios_radialMR <- mr.ios(dat=dat, ios = ios_dat, alpha = 0.05, 1, tol = 0.0001)$coef
+      }
+      ))
+      cochrans_q <- function(b, se)
+{
+	xw <- sum(b / se^2) / sum(1/se^2)
+	qi <- (1/se^2) * (b - xw)^2
+	return(qi)
+}
+      )
+  
+
+)
+
+
+save(m, file="../results/mvmr_simulations.rdata")

@@ -26,7 +26,7 @@ Here we tested the associations of the following phenotypes;
    7. CRP - CHD
    
    
-```{r setup}
+```{r}
 #install.packages("devtools")
 #devtools::install_github("universe77/mr.ios")
 library(mr.ios)
@@ -57,5 +57,33 @@ ios_dat <- ios(exp=exp_dat, bg=bg_dat)
 
 # perform mr
 dat <- harmonise_data(exp_dat, out_dat)
-mr_res <- mr.ios(dat=dat, ios = ios_dat, alpha = 0.05, 4, tol = 0.0001) 
+mr_res <- mr.ios(dat=dat, ios = ios_dat, alpha = 0.05, 1, tol = 0.0001) 
 ```
+
+
+
+
+
+##SBP-CHD
+# choose exposure - SBP
+id_exp <- "ukb-b-20175"
+exp_dat <- extract_instruments(id_exp)
+
+# choose outcome - CHD
+id_out <- "ieu-a-7"
+out_dat <- extract_outcome_data(exp_dat$SNP, id_out)
+
+# choose background dataset list
+id_bg <- background_ids(id_exp=id_exp, id_out=id_out, type="default")
+
+# make background dataset
+bg_dat <- make_background(exp = exp_dat, id_bg = id_bg)
+
+# generate ios
+ios_dat <- ios(exp=exp_dat, bg=bg_dat)
+
+# perform mr
+dat <- harmonise_data(exp_dat, out_dat)
+mr_res <- mr.ios(dat=dat, ios = ios_dat, alpha = 0.05, 1, tol = 0.0001) 
+
+
