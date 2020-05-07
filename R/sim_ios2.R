@@ -7,11 +7,11 @@ library(tidyverse)
 #------------------------------------------------------------------------
 ios_dat <-ios(exp=exp_dat, bg=bg_dat)
 
-a <- list()
-invisible(capture.output(a <- lapply(1:100, function(x) {
+a2 <- list()
+invisible(capture.output(a2 <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_sd", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios2_sd", alpha = 0.05, 6, tol = 0.0001)
 
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
@@ -28,26 +28,26 @@ invisible(capture.output(a <- lapply(1:100, function(x) {
 ))
 )
 
-a <- data.frame(t(sapply(a, c)))
-a$permutation <- rownames(a)
+a2 <- data.frame(t(sapply(a2, c)))
+a2$permutation <- rownames(a2)
 
 temp <- orig.est(dat)
-set1 <- bind.est(temp, a)
+set7 <- bind.est(temp, a2)
 
-set1$method <- "Mod.2nd * ios1_mean"
+set7$method <- "Mod.2nd * ios2_mean"
 
 
 #------------------------------------------------------------------------
-#Method: modified second order * IOS1_sd
+#Method: modified second order * ios2_sd
 #------------------------------------------------------------------------
 
 ios_dat <-ios(exp=exp_dat, bg=bg_dat)
 
-b <- list()
-invisible(capture.output(b <- lapply(1:100, function(x) {
+b2 <- list()
+invisible(capture.output(b2 <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_sd", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios2_sd", alpha = 0.05, 6, tol = 0.0001)
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
   temp$exposure <- dat$exposure[1]
@@ -63,27 +63,27 @@ invisible(capture.output(b <- lapply(1:100, function(x) {
 ))
 )
 
-b <- data.frame(t(sapply(b, c)))
-b$permutation <- rownames(b)
+b2 <- data.frame(t(sapply(b2, c)))
+b2$permutation <- rownames(b2)
 
 
-temp <- orig.est(dat = dat, ios_type = "ios1_sd")
-set2 <- bind.est(temp, b)
+temp <- orig.est(dat = dat, ios_type = "ios2_sd")
+set8 <- bind.est(temp, b)
 
-set2$method <- "Mod.2nd * ios1_sd"
+set8$method <- "Mod.2nd * ios2_sd"
 
 
 #------------------------------------------------------------------------
-#Method: modified second order * IOS1_iqr
+#Method: modified second order * ios2_iqr
 #------------------------------------------------------------------------
 
 ios_dat <-ios(exp=exp_dat, bg=bg_dat)
 
-c <- list()
-invisible(capture.output(c <- lapply(1:100, function(x) {
+c2 <- list()
+invisible(capture.output(c2 <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_iqr", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios2_iqr", alpha = 0.05, 6, tol = 0.0001)
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
   temp$exposure <- dat$exposure[1]
@@ -99,26 +99,26 @@ invisible(capture.output(c <- lapply(1:100, function(x) {
 ))
 )
 
-c <- data.frame(t(sapply(c, c)))
-c$permutation <- rownames(c)
+c2 <- data.frame(t(sapply(c2, c)))
+c2$permutation <- rownames(c2)
 
 
-temp <- orig.est(dat = dat, ios_type = "ios1_iqr")
-set3 <- bind.est(temp, c)
+temp <- orig.est(dat = dat, ios_type = "ios2_iqr")
+set9 <- bind.est(temp, c2)
 
-set3$method <- "Mod.2nd * ios1_iqr"
+set9$method <- "Mod.2nd * ios2_iqr"
 
 
 #------------------------------------------------------------------------
-#Method: modified second order * IOS1_median
+#Method: modified second order * ios2_median
 #------------------------------------------------------------------------
 ios_dat <-ios(exp=exp_dat, bg=bg_dat)
 
-d <- list()
-invisible(capture.output(d <- lapply(1:100, function(x) {
+d2 <- list()
+invisible(capture.output(d2 <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_median", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios2_median", alpha = 0.05, 6, tol = 0.0001)
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
   temp$exposure <- dat$exposure[1]
@@ -134,25 +134,23 @@ invisible(capture.output(d <- lapply(1:100, function(x) {
 ))
 )
 
-d <- data.frame(t(sapply(d, c)))
-d$permutation <- rownames(d)
+d2 <- data.frame(t(sapply(d2, c)))
+d2$permutation <- rownames(d2)
 
-temp <- orig.est(dat = dat, ios_type = "ios1_median")
-set4 <- bind.est(temp, d)
+temp <- orig.est(dat = dat, ios_type = "ios2_median")
+set10 <- bind.est(temp, d2)
 
-set4$method <- "Mod.2nd * ios1_median"
+set10$method <- "Mod.2nd * ios2_median"
 
-#------------------------------------------------------------------------
-#Method: modified second order * IOS1_95
-#------------------------------------------------------------------------
 
+#Method: modified second order * ios2_95
 ios_dat <-ios(exp=exp_dat, bg=bg_dat)
 
-e <- list()
-invisible(capture.output(e <- lapply(1:100, function(x) {
+e2 <- list()
+invisible(capture.output(e2 <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_95", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios2_95", alpha = 0.05, 6, tol = 0.0001)
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
   temp$exposure <- dat$exposure[1]
@@ -168,25 +166,23 @@ invisible(capture.output(e <- lapply(1:100, function(x) {
 ))
 )
 
-e <- data.frame(t(sapply(e, c)))
-e$permutation <- rownames(e)
+e2 <- data.frame(t(sapply(e2, c)))
+e2$permutation <- rownames(e2)
 
-temp <- orig.est(dat = dat, ios_type = "ios1_95")
-set5 <- bind.est(temp, e)
+temp <- orig.est(dat = dat, ios_type = "ios2_95")
+set11 <- bind.est(temp, e2)
 
-set5$method <- "Mod.2nd * ios1_95"
+set11$method <- "Mod.2nd * ios2_95"
 
-#------------------------------------------------------------------------
+
 #Method: modified second order * IOS_max
-#------------------------------------------------------------------------
-
 ios_dat <-ios(exp=exp_dat, bg=bg_dat)
 
-f <- list()
-invisible(capture.output(f <- lapply(1:100, function(x) {
+f2 <- list()
+invisible(capture.output(f2 <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_max", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios2_max", alpha = 0.05, 6, tol = 0.0001)
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
   temp$exposure <- dat$exposure[1]
@@ -202,40 +198,40 @@ invisible(capture.output(f <- lapply(1:100, function(x) {
 ))
 )
 
-f <- data.frame(t(sapply(f, c)))
-f$permutation <- rownames(f)
+f2 <- data.frame(t(sapply(f2, c)))
+f2$permutation <- rownames(f2)
 
-temp <- orig.est(dat = dat, ios_type = "ios1_max")
-set6 <- bind.est(temp, f)
+temp <- orig.est(dat = dat, ios_type = "ios2_max")
+set12 <- bind.est(temp, f2)
 
-set6$method <- "Mod.2nd * ios1_max"
+set12$method <- "Mod.2nd * ios2_max"
 
 
 #------------------------------------------------------------------------
 #Generate a dataframe of simulation results
 #------------------------------------------------------------------------
-ios1_sim <- rbind(set1, set2, set3, set4, set5, set6)
-ios1_sim <- as.data.frame(lapply(ios1_sim, unlist))
+ios2_sim <- rbind(set7, set8, set9, set10, set11, set12)
+#ios2_sim <- as.data.frame(lapply(ios2_sim, unlist))
 
 
 #Define the class if it is not specified (null)
 factor_cols <- c("exposure","outcome", "method")
-ios1_sim[factor_cols] <- lapply(ios1_sim[factor_cols], as.factor)
+ios2_sim[factor_cols] <- lapply(ios2_sim[factor_cols], as.factor)
 numeric_cols <- c("nsnp", "Estimate", "Std.Error", "t.value", "P_val", "Q", "Q_pval", "permutation")
-ios1_sim[numeric_cols] <- lapply(ios1_sim[numeric_cols], as.numeric)
+ios2_sim[numeric_cols] <- lapply(ios2_sim[numeric_cols], as.numeric)
 
 
 #------------------------------------------------------------------------
 #Plots
 #------------------------------------------------------------------------
 
-high <- ios1_sim %>%
+high2 <- ios2_sim %>%
   group_by(method) %>%
   arrange(Q) %>%
   mutate(id = row_number()) %>%
   filter(permutation < 1)
 
-p1 <- ios1_sim %>%
+p2 <- ios2_sim %>%
   group_by(method) %>%
   arrange(Q) %>%
   mutate(id = row_number()) %>%
@@ -244,9 +240,9 @@ p1 <- ios1_sim %>%
   ggplot(aes(y=Q, x=id, group=as.factor(method)), colour=as.factor(method)) +
   geom_point(aes(colour=as.factor(method)), alpha = 0, shape = ".") +
   geom_line(aes(colour=as.factor(method))) +
-  geom_point(data=high, aes(y=Q, x=id), colour='red', size=1) +
+  geom_point(data=high2, aes(y=Q, x=id), colour='red', size=1) +
   labs(x="Permutations", y="Q statistics", colour="Method")
-p1
+p2
 
 
 
@@ -288,6 +284,6 @@ mr.ios_type <-function(dat=dat, ios = ios_dat, ios_type="ios1_mean", alpha = 0.0
   dat_rmr <- RadialMR::format_radial(dat$beta.exposure, dat$beta.outcome, dat$se.exposure, dat$se.outcome, dat$SNP, ios[[ios_type]], ios$SNP)
   rares <- RadialMR::ivw_radial(dat_rmr, alpha, weights, tol, external_weight = TRUE)
   return(rares)
-  }
+}
 
 
