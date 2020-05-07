@@ -68,7 +68,7 @@ b2$permutation <- rownames(b2)
 
 
 temp <- orig.est(dat = dat, ios_type = "ios2_sd")
-set8 <- bind.est(temp, b)
+set8 <- bind.est(temp, b2)
 
 set8$method <- "Mod.2nd * ios2_sd"
 
@@ -212,6 +212,7 @@ set12$method <- "Mod.2nd * ios2_max"
 #------------------------------------------------------------------------
 ios2_sim <- rbind(set7, set8, set9, set10, set11, set12)
 #ios2_sim <- as.data.frame(lapply(ios2_sim, unlist))
+names(ios2_sim)[8] <- "P_val"
 
 
 #Define the class if it is not specified (null)
@@ -225,8 +226,33 @@ ios2_sim[numeric_cols] <- lapply(ios2_sim[numeric_cols], as.numeric)
 #Plots
 #------------------------------------------------------------------------
 
-high2 <- ios2_sim %>%
+
+#plot - ios2 mean
+high <- ios2_sim %>%
   group_by(method) %>%
+  filter(grepl("mean", method)) %>%
+  arrange(Q) %>%
+  mutate(id = row_number()) %>%
+  filter(permutation < 1)
+
+p1 <- ios2_sim %>%
+  group_by(method) %>%
+  arrange(Q) %>%
+  #mutate(id = row_number()) %>%
+  mutate(highperm = permutation == 0) %>%
+  filter(grepl("mean", method)) %>%
+  ggplot(aes(y=Q, x=Estimate, group=as.factor(method)), colour=as.factor(method)) +
+  geom_smooth(method='lm', formula = y ~ x, se=FALSE, size=0.5) +
+  geom_point(aes(colour=as.factor(method)), colour = "coral1", alpha = 1) +
+  #geom_line(aes(colour=as.factor(method))) +
+  geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
+  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  labs(x="Estimate", y="Q statistics", colour="Method")
+
+#plot - ios2 sd
+high <- ios2_sim %>%
+  group_by(method) %>%
+  filter(grepl("sd", method)) %>%
   arrange(Q) %>%
   mutate(id = row_number()) %>%
   filter(permutation < 1)
@@ -234,23 +260,115 @@ high2 <- ios2_sim %>%
 p2 <- ios2_sim %>%
   group_by(method) %>%
   arrange(Q) %>%
-  mutate(id = row_number()) %>%
+  #mutate(id = row_number()) %>%
   mutate(highperm = permutation == 0) %>%
-  #filter(grepl("mean", method)) %>%
-  ggplot(aes(y=Q, x=id, group=as.factor(method)), colour=as.factor(method)) +
-  geom_point(aes(colour=as.factor(method)), alpha = 0, shape = ".") +
-  geom_line(aes(colour=as.factor(method))) +
-  geom_point(data=high2, aes(y=Q, x=id), colour='red', size=1) +
-  geom_hline(yintercept=140.8, linetype="dashed", color = "grey") +
-  labs(x="Permutations", y="Q statistics", colour="Method")
-p2
+  filter(grepl("sd", method)) %>%
+  ggplot(aes(y=Q, x=Estimate, group=as.factor(method)), colour=as.factor(method)) +
+  geom_smooth(method='lm', formula = y ~ x, se=FALSE, size=0.5) +
+  geom_point(aes(colour=as.factor(method)), colour = "deepskyblue",alpha = 1) +
+  #geom_line(aes(colour=as.factor(method))) +
+  geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
+  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  labs(x="Estimate", y="Q statistics", colour="Method")
+
+#plot - ios2 median
+high <- ios2_sim %>%
+  group_by(method) %>%
+  filter(grepl("median", method)) %>%
+  arrange(Q) %>%
+  mutate(id = row_number()) %>%
+  filter(permutation < 1)
+
+p3 <- ios2_sim %>%
+  group_by(method) %>%
+  arrange(Q) %>%
+  #mutate(id = row_number()) %>%
+  mutate(highperm = permutation == 0) %>%
+  filter(grepl("median", method)) %>%
+  ggplot(aes(y=Q, x=Estimate, group=as.factor(method)), colour=as.factor(method)) +
+  geom_smooth(method='lm', formula = y ~ x, se=FALSE, size=0.5) +
+  geom_point(aes(colour=as.factor(method)), colour = "darkolivegreen3", alpha = 1) +
+  #geom_line(aes(colour=as.factor(method))) +
+  geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
+  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  labs(x="Estimate", y="Q statistics", colour="Method")
+
+#plot - ios2 max
+high <- ios2_sim %>%
+  group_by(method) %>%
+  filter(grepl("max", method)) %>%
+  arrange(Q) %>%
+  mutate(id = row_number()) %>%
+  filter(permutation < 1)
+
+p4 <- ios2_sim %>%
+  group_by(method) %>%
+  arrange(Q) %>%
+  #mutate(id = row_number()) %>%
+  mutate(highperm = permutation == 0) %>%
+  filter(grepl("max", method)) %>%
+  ggplot(aes(y=Q, x=Estimate, group=as.factor(method)), colour=as.factor(method)) +
+  geom_smooth(method='lm', formula = y ~ x, se=FALSE, size=0.5) +
+  geom_point(aes(colour=as.factor(method)), colour ="darkgoldenrod2", alpha = 1) +
+  #geom_line(aes(colour=as.factor(method))) +
+  geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
+  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  labs(x="Estimate", y="Q statistics", colour="Method")
+
+#plot - ios2 iqr
+high <- ios2_sim %>%
+  group_by(method) %>%
+  filter(grepl("iqr", method)) %>%
+  arrange(Q) %>%
+  mutate(id = row_number()) %>%
+  filter(permutation < 1)
+
+p5 <- ios2_sim %>%
+  group_by(method) %>%
+  arrange(Q) %>%
+  #mutate(id = row_number()) %>%
+  mutate(highperm = permutation == 0) %>%
+  filter(grepl("iqr", method)) %>%
+  ggplot(aes(y=Q, x=Estimate, group=as.factor(method)), colour=as.factor(method)) +
+  geom_smooth(method='lm', formula = y ~ x, se=FALSE, size=0.5) +
+  geom_point(aes(colour=as.factor(method)), colour = "darkmagenta", alpha = 1) +
+  #geom_line(aes(colour=as.factor(method))) +
+  geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
+  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  labs(x="Estimate", y="Q statistics", colour="Method")
+
+#plot - ios2 95
+high <- ios2_sim %>%
+  group_by(method) %>%
+  filter(grepl("95", method)) %>%
+  arrange(Q) %>%
+  mutate(id = row_number()) %>%
+  filter(permutation < 1)
+
+p6 <- ios2_sim %>%
+  group_by(method) %>%
+  arrange(Q) %>%
+  #mutate(id = row_number()) %>%
+  mutate(highperm = permutation == 0) %>%
+  filter(grepl("95", method)) %>%
+  ggplot(aes(y=Q, x=Estimate, group=as.factor(method)), colour=as.factor(method)) +
+  geom_smooth(method='lm', formula = y ~ x, se=FALSE, size=0.5) +
+  geom_point(aes(colour=as.factor(method)), colour = "darkorange", alpha = 1) +
+  #geom_line(aes(colour=as.factor(method))) +
+  geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
+  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  labs(x="Estimate", y="Q statistics", colour="Method")
+
+
+
+ios2_p <- plot_grid(p1, p2, p3, p4, p5, p6, labels = "AUTO")
 
 
 
 #------------------------------------------------------------------------
 #functions
 #------------------------------------------------------------------------
-orig.est <- function(dat = dat, ios_type = "ios1_mean", weights =6){
+orig.est <- function(dat = dat, ios_type = "ios2_mean", weights =6){
   ios_dat <-ios(exp=exp_dat, bg=bg_dat)
   mr <- mr.ios_type(dat=dat, ios = ios_dat, ios_type=ios_type, alpha = 0.05, weights, tol = 0.0001)
   temp <- mr$coef[1, ]
@@ -281,7 +399,7 @@ bind.est <- function(x, y){
 }
 
 
-mr.ios_type <-function(dat=dat, ios = ios_dat, ios_type="ios1_mean", alpha = 0.05, weights, tol = 0.0001){
+mr.ios_type <-function(dat=dat, ios = ios_dat, ios_type="ios2_mean", alpha = 0.05, weights, tol = 0.0001){
   dat_rmr <- RadialMR::format_radial(dat$beta.exposure, dat$beta.outcome, dat$se.exposure, dat$se.outcome, dat$SNP, ios[[ios_type]], ios$SNP)
   rares <- RadialMR::ivw_radial(dat_rmr, alpha, weights, tol, external_weight = TRUE)
   return(rares)

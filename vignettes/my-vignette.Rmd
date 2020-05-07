@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 
-#Empirical examples using mr.ios packages
+# Empirical examples using mr.ios packages
 Here we tested the associations of the following phenotypes;
    1. BMI - CHD
    2. SBP - CHD
@@ -24,6 +24,7 @@ Here we tested the associations of the following phenotypes;
    5. Urate - CHD
    6. Urate - eGFR
    7. CRP - CHD
+   
    
    
 ```{r}
@@ -36,7 +37,7 @@ library(reshape2)
 ```
 
 
-##BMI-CHD
+## BMI-CHD
 ```{r}
 # choose exposure - BMI
 id_exp <- "ieu-a-2"
@@ -64,7 +65,9 @@ mr_res <- mr.ios(dat=dat, ios = ios_dat, alpha = 0.05, 1, tol = 0.0001)
 
 
 
-##SBP-CHD
+## SBP-CHD
+
+```{r}
 # choose exposure - SBP
 id_exp <- "ukb-b-20175"
 exp_dat <- extract_instruments(id_exp)
@@ -85,5 +88,132 @@ ios_dat <- ios(exp=exp_dat, bg=bg_dat)
 # perform mr
 dat <- harmonise_data(exp_dat, out_dat)
 mr_res <- mr.ios(dat=dat, ios = ios_dat, alpha = 0.05, 1, tol = 0.0001) 
+```
 
 
+## EDU (year of schooling) - BMI
+
+```{r}
+# choose exposure - Edu
+id_exp <- "ieu-a-1239"
+exp_dat <- extract_instruments(id_exp)
+
+# choose outcome - BMI
+id_out <- "ieu-a-2"
+out_dat <- extract_outcome_data(exp_dat$SNP, id_out)
+
+# choose background dataset list
+id_bg <- background_ids(id_exp=id_exp, id_out=id_out, type="default")
+
+# make background dataset
+bg_dat <- make_background(exp = exp_dat, id_bg = id_bg)
+
+# generate ios
+ios_dat <- ios(exp=exp_dat, bg=bg_dat)
+
+# perform mr
+dat <- harmonise_data(exp_dat, out_dat)
+mr_res <- mr.ios_type(dat=dat, ios = ios_dat, ios_type = "ios1_mean", alpha = 0.05, weight = 1, tol = 0.0001) 
+```
+
+
+## Sleep - schizophrenia
+
+```{r}
+# choose exposure - SBP
+id_exp <- "ukb-b-4424"
+exp_dat <- extract_instruments(id_exp)
+
+# choose outcome - CHD
+id_out <- "ieu-a-22"
+out_dat <- extract_outcome_data(exp_dat$SNP, id_out)
+
+# choose background dataset list
+id_bg <- background_ids(id_exp=id_exp, id_out=id_out, type="default")
+
+# make background dataset
+bg_dat <- make_background(exp = exp_dat, id_bg = id_bg)
+
+# generate ios
+ios_dat <- ios(exp=exp_dat, bg=bg_dat)
+
+# perform mr
+dat <- harmonise_data(exp_dat, out_dat)
+mr_res <- mr.ios_type(dat=dat, ios = ios_dat, type = "ios1_mean", alpha = 0.05, 1, tol = 0.0001) 
+```
+
+
+## Urate - CHD
+
+```{r}
+# choose exposure - SBP
+id_exp <- "ieu-a-1055"
+exp_dat <- extract_instruments(id_exp)
+
+# choose outcome - CHD
+id_out <- "ieu-a-7"
+out_dat <- extract_outcome_data(exp_dat$SNP, id_out)
+
+# choose background dataset list
+id_bg <- background_ids(id_exp=id_exp, id_out=id_out, type="default")
+
+# make background dataset
+bg_dat <- make_background(exp = exp_dat, id_bg = id_bg)
+
+# generate ios
+ios_dat <- ios(exp=exp_dat, bg=bg_dat)
+
+# perform mr
+dat <- harmonise_data(exp_dat, out_dat)
+mr_res <- mr.ios_type(dat=dat, ios = ios_dat, type = "ios1_mean", alpha = 0.05, 1, tol = 0.0001) 
+```
+
+## Urate - eGFR
+
+```{r}
+# choose exposure - SBP
+id_exp <- "ieu-a-1055"
+exp_dat <- extract_instruments(id_exp)
+
+# choose outcome - CHD
+id_out <- "ieu-a-1105"
+out_dat <- extract_outcome_data(exp_dat$SNP, id_out)
+
+# choose background dataset list
+id_bg <- background_ids(id_exp=id_exp, id_out=id_out, type="default")
+
+# make background dataset
+bg_dat <- make_background(exp = exp_dat, id_bg = id_bg)
+
+# generate ios
+ios_dat <- ios(exp=exp_dat, bg=bg_dat)
+
+# perform mr
+dat <- harmonise_data(exp_dat, out_dat)
+mr_res <- mr.ios_type(dat=dat, ios = ios_dat, type = "ios1_mean", alpha = 0.05, 1, tol = 0.0001) 
+```
+
+
+##CRP - CHD
+```{r}
+# choose exposure - SBP
+id_exp <- "ieu-a-1015"
+exp_dat <- extract_instruments(id_exp)
+
+# choose outcome - CHD
+id_out <- "ieu-a-7"
+out_dat <- extract_outcome_data(exp_dat$SNP, id_out)
+
+# choose background dataset list
+id_bg <- background_ids(id_exp=id_exp, id_out=id_out, type="default")
+
+# make background dataset
+bg_dat <- make_background(exp = exp_dat, id_bg = id_bg)
+
+# generate ios
+ios_dat <- ios(exp=exp_dat, bg=bg_dat)
+
+# perform mr
+dat <- harmonise_data(exp_dat, out_dat)
+mr_res <- mr.ios_type(dat=dat, ios = ios_dat, type = "ios1_mean", alpha = 0.05, 1, tol = 0.0001) 
+```
