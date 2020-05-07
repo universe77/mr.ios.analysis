@@ -229,6 +229,11 @@ ios1_sim[numeric_cols] <- lapply(ios1_sim[numeric_cols], as.numeric)
 #Plots
 #------------------------------------------------------------------------
 
+#original IVW Radial MR
+drmr <- RadialMR::format_radial(dat$beta.exposure, dat$beta.outcome, dat$se.exposure, dat$se.outcome, ios_dat$ios1_mean, ios_dat$SNP)
+ormr <- RadialMR::ivw_radial(drmr, alpha = 0.05, weights = 3, tol = 0.0001, external_weight = FALSE)
+
+
 high <- ios1_sim %>%
   group_by(method) %>%
   arrange(Q) %>%
@@ -245,6 +250,7 @@ p1 <- ios1_sim %>%
   geom_point(aes(colour=as.factor(method)), alpha = 0, shape = ".") +
   geom_line(aes(colour=as.factor(method))) +
   geom_point(data=high, aes(y=Q, x=id), colour='red', size=1) +
+  geom_hline(yintercept=140.8, linetype="dashed", color = "grey") +
   labs(x="Permutations", y="Q statistics", colour="Method")
 p1
 

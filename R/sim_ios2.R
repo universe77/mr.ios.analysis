@@ -241,6 +241,7 @@ p2 <- ios2_sim %>%
   geom_point(aes(colour=as.factor(method)), alpha = 0, shape = ".") +
   geom_line(aes(colour=as.factor(method))) +
   geom_point(data=high2, aes(y=Q, x=id), colour='red', size=1) +
+  geom_hline(yintercept=140.8, linetype="dashed", color = "grey") +
   labs(x="Permutations", y="Q statistics", colour="Method")
 p2
 
