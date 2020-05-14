@@ -5,7 +5,7 @@ library(tidyverse)
 #------------------------------------------------------------------------
 #Method: modified second order * IOS_mean
 #------------------------------------------------------------------------
-ios_dat <-ios(exp=exp_dat, bg=bg_dat)
+ios_dat <-mr.ios::ios(exp=exp_dat, bg=bg_dat)
 
 a <- list()
 invisible(capture.output(a <- lapply(1:100, function(x) {
@@ -41,7 +41,7 @@ set1$method <- "Mod.2nd * ios1_mean"
 #Method: modified second order * IOS1_sd
 #------------------------------------------------------------------------
 
-ios_dat <-ios(exp=exp_dat, bg=bg_dat)
+ios_dat <-mr.ios::ios(exp=exp_dat, bg=bg_dat)
 
 b <- list()
 invisible(capture.output(b <- lapply(1:100, function(x) {
@@ -77,7 +77,7 @@ set2$method <- "Mod.2nd * ios1_sd"
 #Method: modified second order * IOS1_iqr
 #------------------------------------------------------------------------
 
-ios_dat <-ios(exp=exp_dat, bg=bg_dat)
+ios_dat <-mr.ios::ios(exp=exp_dat, bg=bg_dat)
 
 c <- list()
 invisible(capture.output(c <- lapply(1:100, function(x) {
@@ -112,7 +112,7 @@ set3$method <- "Mod.2nd * ios1_iqr"
 #------------------------------------------------------------------------
 #Method: modified second order * IOS1_median
 #------------------------------------------------------------------------
-ios_dat <-ios(exp=exp_dat, bg=bg_dat)
+ios_dat <-mr.ios::ios(exp=exp_dat, bg=bg_dat)
 
 d <- list()
 invisible(capture.output(d <- lapply(1:100, function(x) {
@@ -146,7 +146,7 @@ set4$method <- "Mod.2nd * ios1_median"
 #Method: modified second order * IOS1_95
 #------------------------------------------------------------------------
 
-ios_dat <-ios(exp=exp_dat, bg=bg_dat)
+ios_dat <-mr.ios::ios(exp=exp_dat, bg=bg_dat)
 
 e <- list()
 invisible(capture.output(e <- lapply(1:100, function(x) {
@@ -180,7 +180,7 @@ set5$method <- "Mod.2nd * ios1_95"
 #Method: modified second order * IOS_max
 #------------------------------------------------------------------------
 
-ios_dat <-ios(exp=exp_dat, bg=bg_dat)
+ios_dat <-mr.ios::ios(exp=exp_dat, bg=bg_dat)
 
 f <- list()
 invisible(capture.output(f <- lapply(1:100, function(x) {
@@ -254,7 +254,7 @@ p1 <- ios1_sim %>%
   geom_point(aes(colour=as.factor(method)), colour = "coral1", alpha = 1) +
   #geom_line(aes(colour=as.factor(method))) +
   geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
-  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  geom_hline(yintercept=876.6109, linetype="dashed", color = "grey") +
   labs(x="Estimate", y="Q statistics", colour="Method")
 
 #plot - ios1 sd
@@ -276,7 +276,7 @@ p2 <- ios1_sim %>%
   geom_point(aes(colour=as.factor(method)), colour = "deepskyblue",alpha = 1) +
   #geom_line(aes(colour=as.factor(method))) +
   geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
-  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  geom_hline(yintercept=876.6109, linetype="dashed", color = "grey") +
   labs(x="Estimate", y="Q statistics", colour="Method")
 
 #plot - ios1 median
@@ -298,7 +298,7 @@ p3 <- ios1_sim %>%
   geom_point(aes(colour=as.factor(method)), colour = "darkolivegreen3", alpha = 1) +
   #geom_line(aes(colour=as.factor(method))) +
   geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
-  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  geom_hline(yintercept=876.6109, linetype="dashed", color = "grey") +
   labs(x="Estimate", y="Q statistics", colour="Method")
 
 #plot - ios1 max
@@ -320,7 +320,7 @@ p4 <- ios1_sim %>%
   geom_point(aes(colour=as.factor(method)), colour ="darkgoldenrod2", alpha = 1) +
   #geom_line(aes(colour=as.factor(method))) +
   geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
-  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  geom_hline(yintercept=876.6109, linetype="dashed", color = "grey") +
   labs(x="Estimate", y="Q statistics", colour="Method")
 
 #plot - ios1 iqr
@@ -342,7 +342,7 @@ p5 <- ios1_sim %>%
   geom_point(aes(colour=as.factor(method)), colour = "darkmagenta", alpha = 1) +
   #geom_line(aes(colour=as.factor(method))) +
   geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
-  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  geom_hline(yintercept=876.6109, linetype="dashed", color = "grey") +
   labs(x="Estimate", y="Q statistics", colour="Method")
 
 #plot - ios1 95
@@ -364,11 +364,11 @@ p6 <- ios1_sim %>%
   geom_point(aes(colour=as.factor(method)), colour = "darkorange", alpha = 1) +
   #geom_line(aes(colour=as.factor(method))) +
   geom_point(data=high, aes(y=Q, x=Estimate), colour='black', size=1) +
-  geom_hline(yintercept=648.0386, linetype="dashed", color = "grey") +
+  geom_hline(yintercept=876.6109, linetype="dashed", color = "grey") +
   labs(x="Estimate", y="Q statistics", colour="Method")
 
 
-
+library(cowplot)
 ios1_p <- plot_grid(p1, p2, p3, p4, p5, p6, labels = "AUTO")
 
 
@@ -376,7 +376,7 @@ ios1_p <- plot_grid(p1, p2, p3, p4, p5, p6, labels = "AUTO")
 #functions
 #------------------------------------------------------------------------
 orig.est <- function(dat = dat, ios_type = "ios1_mean", weights =6){
-  ios_dat <-ios(exp=exp_dat, bg=bg_dat)
+  ios_dat <-mr.ios::ios(exp=exp_dat, bg=bg_dat)
   mr <- mr.ios_type(dat=dat, ios = ios_dat, ios_type=ios_type, alpha = 0.05, weights, tol = 0.0001)
   temp <- mr$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
