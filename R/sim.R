@@ -2,6 +2,11 @@ library(mr.ios)
 library(parallel)
 library(tidyverse)
 
+
+load("/newhome/yc16575/mrios/results/ios_sim_chd_bmi_240619.RData")
+
+
+
 #------------------------------------------------------------------------
 #Method: modified second order * IOS_mean
 #------------------------------------------------------------------------
@@ -11,7 +16,7 @@ a <- list()
 invisible(capture.output(a <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_mean", alpha = 0.05, weight = 6, tol = 0.0001)
+  ios_radialMR <- mr.ios(dat=dat, ios = ios_dat, ios_type="ios1_mean", alpha = 0.05, weight = 6, tol = 0.0001)
 
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
@@ -47,7 +52,7 @@ b <- list()
 invisible(capture.output(b <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_sd", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios(dat=dat, ios = ios_dat, ios_type="ios1_sd", alpha = 0.05, 6, tol = 0.0001)
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
   temp$exposure <- dat$exposure[1]
@@ -83,7 +88,7 @@ c <- list()
 invisible(capture.output(c <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_iqr", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios(dat=dat, ios = ios_dat, ios_type="ios1_iqr", alpha = 0.05, 6, tol = 0.0001)
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
   temp$exposure <- dat$exposure[1]
@@ -118,7 +123,7 @@ d <- list()
 invisible(capture.output(d <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_median", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios(dat=dat, ios = ios_dat, ios_type="ios1_median", alpha = 0.05, 6, tol = 0.0001)
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
   temp$exposure <- dat$exposure[1]
@@ -152,7 +157,7 @@ e <- list()
 invisible(capture.output(e <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_95", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios(dat=dat, ios = ios_dat, ios_type="ios1_95", alpha = 0.05, 6, tol = 0.0001)
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
   temp$exposure <- dat$exposure[1]
@@ -186,7 +191,7 @@ f <- list()
 invisible(capture.output(f <- lapply(1:100, function(x) {
 
   ios_dat$SNP <- sample(ios_dat$SNP)
-  ios_radialMR <- mr.ios_type(dat=dat, ios = ios_dat, ios_type="ios1_max", alpha = 0.05, 6, tol = 0.0001)
+  ios_radialMR <- mr.ios(dat=dat, ios = ios_dat, ios_type="ios1_max", alpha = 0.05, 6, tol = 0.0001)
   temp <- ios_radialMR$coef[1, ]
   temp <- tibble::rownames_to_column(temp, "method")
   temp$exposure <- dat$exposure[1]
@@ -370,46 +375,5 @@ p6 <- ios1_sim %>%
 
 library(cowplot)
 ios1_p <- plot_grid(p1, p2, p3, p4, p5, p6, labels = "AUTO")
-
-
-#------------------------------------------------------------------------
-#functions
-#------------------------------------------------------------------------
-orig.est <- function(dat = dat, ios_type = "ios1_mean", weights =6){
-  ios_dat <-mr.ios::ios(exp=exp_dat, bg=bg_dat)
-  mr <- mr.ios_type(dat=dat, ios = ios_dat, ios_type=ios_type, alpha = 0.05, weights, tol = 0.0001)
-  temp <- mr$coef[1, ]
-  temp <- tibble::rownames_to_column(temp, "method")
-  temp$exposure <- dat$exposure[1]
-  temp$outcome <- dat$outcome[1]
-  temp$nsnp <- length(dat$SNP)
-  temp$Q <- mr$qstatistic
-  temp$Q_pval <- Total_Q_chi<-pchisq(mr$qstatistic, mr$df, lower.tail = FALSE)
-  temp2 <- temp[, c(6, 7, 1, 8, 2, 3, 4, 5, 9, 10)]
-  temp2$permutation <- 0
-  return(temp2)
-}
-
-
-bind.est <- function(x, y){
-  for (i in names(x)) {
-    if (!(i %in% names(y))) {
-      names = c(colnames(y))
-      colnames(x) = names
-      set <- rbind(x, y)
-    }
-    else if(i==tail(names(y),n=1)) {
-      set <- rbind(x, y)
-    }
-  }
-  return(set)
-}
-
-
-mr.ios_type <-function(dat=dat, ios = ios_dat, ios_type="ios1_mean", alpha = 0.05, weights, tol = 0.0001){
-  dat_rmr <- RadialMR::format_radial(dat$beta.exposure, dat$beta.outcome, dat$se.exposure, dat$se.outcome, dat$SNP, ios[[ios_type]], ios$SNP)
-  rares <- RadialMR::ivw_radial(dat_rmr, alpha, weights, tol, external_weight = TRUE)
-  return(rares)
-  }
 
 
